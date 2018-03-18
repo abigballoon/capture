@@ -1,0 +1,12 @@
+<div *ngIf="show">
+  <div class="card main-panel">
+    <div class="card-header p-1 bg-menu menu-panel" *ngIf="toolbar">
+      <div class="text-right">
+        <span class="icon-btn" (click)="close()"><i class="fas fa-times"></i></span>
+      </div>
+    </div>
+    <div class="card-body bg-background" style="padding: 0">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>

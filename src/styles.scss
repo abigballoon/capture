@@ -1,0 +1,49 @@
+$menu: #194769;
+$background: #f6f6e9;
+$sidebar: #d7eef2;
+$highlight: #f2855e;
+
+html, body {
+  background-color: rgba(0, 0, 0, 0)!important;
+}
+
+.main-panel {
+  border: none!important;
+}
+
+.menu-panel {
+  -webkit-app-region: drag;
+}
+
+.bg-menu {
+  color: $background;
+  background-color: $menu!important;
+}
+
+.bg-background {
+  background-color: $background;
+}
+
+.bg-sidebar {
+  background-color: $sidebar;
+}
+
+.bg-highlight {
+  background-color: $highlight;
+}
+
+.icon-btn {
+  border-radius: 4px;
+  font-size: 1.2rem;
+  width: 1.8rem;
+  height: 1.8rem;
+  display: inline-block;
+  text-align: center;
+  -webkit-app-region: no-drag;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    color: $highlight;
+  }
+}

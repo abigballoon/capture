@@ -1,0 +1,6 @@
+<div (mouseup)="handleMouseUpEvent($event)"
+     (mousedown)="handleMouseDownEvent($event)"
+     (mousemove)="handleMouseMoveEvent($event)">
+  <mask [hlarea]="hlarea"></mask>
+  <img draggable="false" style="max-width: 100%" [src]="base64img" />
+</div>
