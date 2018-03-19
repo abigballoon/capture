@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { ScreenService } from "./../screen.service";
-import { NativeImage } from "electron";
+import { NativeImage, Rectangle } from "electron";
 import { ElectronService } from "../../../common/electron/service";
 import { MainPanelService } from "../../../app.service";
 import { Rect } from "./utils";
@@ -41,7 +41,6 @@ export class ScreenDisplay implements OnInit {
   handleMouseUpEvent(event: MouseEvent) {
     if (event.which == 3) {
       let valid = this.validhlarea();
-      console.log(valid);
       if (valid) {this.clearDrag();}
       else {this.router.navigate(["/", ]);}
     } else if (event.which == 1) {
@@ -51,6 +50,11 @@ export class ScreenDisplay implements OnInit {
 
   handleMouseDownEvent(event: MouseEvent) {
     if (event.which != 1) return;
+    if (this.validhlarea() && this.insidehlarea(event)) {
+      this.saveImg();
+      this.clearDrag();
+      this.router.navigate(["/", ]);
+    }
     let x: number = event.screenX;
     let y: number = event.screenY;
     this.hlarea = {lt: {x: x, y: y}, br: {x: x, y: y}};
@@ -72,9 +76,26 @@ export class ScreenDisplay implements OnInit {
 
   validhlarea() {
     let area = this.hlarea;
-    console.log(area);
     if (!area) { return false; }
     if (area.br.x == area.lt.x || area.lt.y == area.br.y) { return false; }
     return true;
+  }
+
+  insidehlarea(event: MouseEvent) {
+    if (!this.validhlarea()) return false;
+    let area = this.hlarea;
+    let x = event.screenX;
+    let y = event.screenY;
+    if ((area.lt.x < x && area.br.x > x) && (area.lt.y < y && area.br.y > y)) {return true;}
+    return false;
+  }
+
+  saveImg() {
+    if (!this.validhlarea()) return;
+    let croped = (<NativeImage>this.img.thumbnail).crop(
+      {x: this.hlarea.lt.x, y: this.hlarea.lt.y, height: this.hlarea.br.y - this.hlarea.lt.y, width: this.hlarea.br.x - this.hlarea.lt.x}
+    );
+    let buff = croped.toPNG();
+    buff.write("./data/img.png");
   }
 }
