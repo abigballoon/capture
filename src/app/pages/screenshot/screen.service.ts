@@ -4,11 +4,12 @@ import { NativeImage } from "electron";
 
 @Injectable()
 export class ScreenService {
-  img: any;
+  img: any = {};
 
   setData(data): Promise<any> {
-    this.img = data;
-    this.img.base64 = (<NativeImage>data.thumbnail).toDataURL();
+    // this.img = data;
+    // this.img.base64 = data.thumbnail.toDataURL();
+    this.img.base64 = data;
     return new Promise((resolve, reject) => resolve(true));
   }
 

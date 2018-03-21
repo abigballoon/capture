@@ -6,6 +6,7 @@ import { AppComponent } from './app.component';
 import { routings } from './routes';
 import { ElectronService } from './common/electron/service';
 import { MainPanelService } from './app.service';
+import { ScreenService } from './pages/screenshot/screen.service';
 
 @NgModule({
   declarations: [
@@ -18,6 +19,7 @@ import { MainPanelService } from './app.service';
   providers: [
     ElectronService,
     MainPanelService,
+    ScreenService,
   ],
   bootstrap: [AppComponent]
 })

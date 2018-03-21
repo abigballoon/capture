@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
 import { Router } from "@angular/router";
 import { ElectronService } from "../../common/electron/service";
-import { NativeImage } from "electron";
+import { NativeImage, ipcRenderer } from "electron";
 import { ScreenService } from "./screen.service";
 import { MainPanelService } from "../../app.service";
 
@@ -40,13 +40,18 @@ export class ScreenShotComponent {
   snap() {
     this.electron.capture().then(
       img => {
-        this.displayImg(img);
+        this.displayImg(img.thumbnail.toDataURL());
         this.showWindow();
       }
     );
   }
 
   displayImg(img: any) {
-    this.dataService.setData(img).then(() => this.router.navigate(["/display", ]));
+    // this.dataService.setData(img).then(() => this.router.navigate(["/display", ]));
+    this.electron.newWindow();
+    ipcRenderer.send("img-window-ready", img);
+    // ipcMain.on("img-window-ready", (event, arg) => {
+    //   event.sender.send("img-window-display", img);
+    // });
   }
 }

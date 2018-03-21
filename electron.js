@@ -1,73 +1,41 @@
-const { app, BrowserWindow } = require('electron')
+const { app, BrowserWindow, ipcMain } = require('electron')
 
 let win;
 
-function createWindow () {
-  // Create the browser window.
-  win = new BrowserWindow({
-    width: 140,
-    height: 83,
-    icon: `file://${__dirname}/dist/assets/logo.png`,
-    // transparent: true,
-    frame: false,
-    resizable: false,
+function initialize() {
+  require("./mainprocess/newwindow.js");
+  function createWindow () {
+    win = new BrowserWindow({
+      width: 140,
+      height: 83,
+      icon: `file://${__dirname}/dist/assets/logo.png`,
+      // transparent: true,
+      frame: false,
+      resizable: false,
+    })
+
+    win.loadURL(`file://${__dirname}/dist/index.html`)
+    win.webContents.openDevTools()
+
+    win.on('closed', function () {
+      win = null
+    })
+  }
+
+  app.on('ready', createWindow)
+
+  app.on('window-all-closed', function () {
+    if (process.platform !== 'darwin') {
+      app.quit()
+    }
   })
 
-
-  win.loadURL(`file://${__dirname}/dist/index.html`)
-
-  //// uncomment below to open the DevTools.
-  // win.webContents.openDevTools()
-
-  // Event when the window is closed.
-  win.on('closed', function () {
-    win = null
-  })
+  app.on('activate', function () {
+    // macOS specific close process
+    if (win === null) {
+      createWindow()
+    }
+  });
 }
 
-// Create window on electron intialization
-app.on('ready', createWindow)
-
-// Quit when all windows are closed.
-app.on('window-all-closed', function () {
-
-  // On macOS specific close process
-  if (process.platform !== 'darwin') {
-    app.quit()
-  }
-})
-
-app.on('activate', function () {
-  // macOS specific close process
-  if (win === null) {
-    createWindow()
-  }
-});
-
-/**
-(function () {
-  function init() { 
-    document.getElementById("min-btn").addEventListener("click", function (e) {
-      var window = BrowserWindow.getFocusedWindow();
-      window.minimize(); 
-    });
-
-    document.getElementById("max-btn").addEventListener("click", function (e) {
-      var window = BrowserWindow.getFocusedWindow(); 
-      window.maximize(); 
-    });
-
-    document.getElementById("win-close-btn").addEventListener("click", function (e) {
-      var window = BrowserWindow.getFocusedWindow();
-      window.close();
-    }); 
- }; 
-
-  document.onreadystatechange = function () {
-    if (document.readyState == "complete") {
-      init(); 
-    }
-  };
-
-})();
-*/
+initialize();

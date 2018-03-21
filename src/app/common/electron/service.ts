@@ -6,6 +6,17 @@ import * as path from "path";
 export class ElectronService {
   hided_windows = [];
 
+  newWindow() {
+    let opt: any = this.screenSize();
+    opt.frame = false;
+    let win = new remote.BrowserWindow(opt);
+    win.on('close', () => { win = null });
+    let tpl = path.join('file://', __dirname, '../../../../dist/index.html');
+    win.loadURL(tpl);
+    win.webContents.openDevTools()
+    return win;
+  }
+
   closeWin() {
     var window = remote.getCurrentWindow();
     window.close();

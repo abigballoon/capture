@@ -6,6 +6,7 @@ import { ElectronService } from "../../../common/electron/service";
 import { MainPanelService } from "../../../app.service";
 import { Rect } from "./utils";
 import { Service } from "./service";
+import * as fs from 'fs';
 
 @Component({
   templateUrl: './display.html',
@@ -96,6 +97,6 @@ export class ScreenDisplay implements OnInit {
       {x: this.hlarea.lt.x, y: this.hlarea.lt.y, height: this.hlarea.br.y - this.hlarea.lt.y, width: this.hlarea.br.x - this.hlarea.lt.x}
     );
     let buff = croped.toPNG();
-    buff.write("./data/img.png");
+    fs.writeFile("./data/img.png", buff, error => console.log(error));
   }
 }
